@@ -1,0 +1,3 @@
+/home/lm/code-demo/oauth2-demo/oauth-resource/src/main/java/com/demo/oauth/resource/OauthResourceApplication.java
+/home/lm/code-demo/oauth2-demo/oauth-resource/src/main/java/com/demo/oauth/resource/config/ResourceSecurityConfig.java
+/home/lm/code-demo/oauth2-demo/oauth-resource/src/main/java/com/demo/oauth/resource/controller/UserInfoController.java

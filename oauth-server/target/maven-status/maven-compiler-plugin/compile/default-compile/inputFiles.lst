@@ -1,0 +1,4 @@
+/home/lm/code-demo/oauth2-demo/oauth-server/src/main/java/com/demo/oauth/server/OauthServerApplication.java
+/home/lm/code-demo/oauth2-demo/oauth-server/src/main/java/com/demo/oauth/server/config/AuthorizationServerConfig.java
+/home/lm/code-demo/oauth2-demo/oauth-server/src/main/java/com/demo/oauth/server/config/DefaultSecurityConfig.java
+/home/lm/code-demo/oauth2-demo/oauth-server/src/main/java/com/demo/oauth/server/config/RegisteredClientsConfig.java
