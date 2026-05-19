@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DemoAuth 登录</title>
+    <style>
+        body { font-family: sans-serif; max-width: 360px; margin: 80px auto; }
+        label { display: block; margin-top: 12px; }
+        input { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { margin-top: 16px; padding: 10px 24px; }
+        .error { color: #c00; margin-top: 12px; }
+    </style>
+</head>
+<body>
+<h2>DemoAuth 登录</h2>
+<p>演示账号：alice / password</p>
+<p style="font-size:13px;color:#666">OIDC 学习：授权中心用户 alice 已关联业务用户 U10001（demo-app）</p>
+<form method="post" action="/login">
+    <label>用户名
+        <input type="text" name="username" value="alice" required>
+    </label>
+    <label>密码
+        <input type="password" name="password" value="password" required>
+    </label>
+    <button type="submit">登录</button>
+</form>
+<p class="error" th:if="${error}" th:text="${error}"></p>
+</body>
+</html>

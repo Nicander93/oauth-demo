@@ -1,5 +1,11 @@
 server:
+  # 授权服务器端口
   port: 9000
+  address: 0.0.0.0
+  servlet:
+    session:
+      cookie:
+        name: OAUTH_AUTH_SESSION
 
 spring:
   application:

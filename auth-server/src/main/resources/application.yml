@@ -1,0 +1,14 @@
+server:
+  port: 9000
+
+spring:
+  thymeleaf:
+    cache: false
+
+manual:
+  oauth:
+    code-expires-seconds: 300
+    token-expires-seconds: 3600
+  oidc:
+    issuer: http://localhost:9000
+    jwt-secret: demo-oidc-secret-change-me

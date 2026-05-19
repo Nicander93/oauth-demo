@@ -1,6 +1,7 @@
 server:
+  # 资源服务器端口
   port: 8090
-
+  address: 0.0.0.0
 spring:
   application:
     name: oauth-resource
@@ -8,7 +9,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://127.0.0.1:9000
+          # 用授权服务器发行者地址自动发现 JWK，用于验签 JWT
+          issuer-uri: http://localhost:9000
 
 logging:
   level:

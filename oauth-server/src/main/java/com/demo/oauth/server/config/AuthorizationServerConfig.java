@@ -38,21 +38,28 @@ public class AuthorizationServerConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
+        // 创建授权服务器端点配置器（/oauth2/authorize、/oauth2/token、/.well-known/** 等）
         OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
                 OAuth2AuthorizationServerConfigurer.authorizationServer();
+
+        // 这个过滤链只作用于授权服务器相关端点
         http.securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
                 .with(authorizationServerConfigurer, (authorizationServer) ->
+                        // 开启 OIDC 1.0 支持（会提供 OIDC 相关端点和能力）
                         authorizationServer.oidc(Customizer.withDefaults()))
                 .authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated())
                 .exceptionHandling((exceptions) -> exceptions.defaultAuthenticationEntryPointFor(
+                        // 浏览器访问未登录时，跳转到表单登录页 /login
                         new LoginUrlAuthenticationEntryPoint("/login"),
                         new MediaTypeRequestMatcher(MediaType.TEXT_HTML)))
+                // 让授权服务器自己的用户信息等端点可以按 JWT 方式鉴权
                 .oauth2ResourceServer((resourceServer) -> resourceServer.jwt(Customizer.withDefaults()));
         return http.build();
     }
 
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
+        // 生成 RSA 密钥对并发布为 JWK，用于签发/校验 JWT
         KeyPair keyPair = generateRsaKey();
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
@@ -66,16 +73,19 @@ public class AuthorizationServerConfig {
 
     @Bean
     public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
+        // 用授权服务器 JWK 初始化 JWT 解码器
         return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
     }
 
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
-        return AuthorizationServerSettings.builder().issuer("http://127.0.0.1:9000").build();
+        // issuer 要和客户端/资源服务器里配置的 issuer-uri 保持一致
+        return AuthorizationServerSettings.builder().issuer("http://localhost:9000").build();
     }
 
     @Bean
     public OAuth2TokenCustomizer<JwtEncodingContext> accessTokenCustomizer() {
+        // 自定义 access token 的 claims，便于资源服务器读取业务字段
         return (context) -> {
             if (!OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) {
                 return;

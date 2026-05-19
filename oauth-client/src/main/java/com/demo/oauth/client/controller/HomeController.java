@@ -13,6 +13,7 @@ import org.springframework.web.client.RestClient;
 @Controller
 public class HomeController {
 
+    // 资源服务器地址，由配置文件注入
     @Value("${demo.resource.userinfo-uri}")
     private String userinfoUri;
 
@@ -26,14 +27,20 @@ public class HomeController {
             @RegisteredOAuth2AuthorizedClient("demo-client") OAuth2AuthorizedClient authorizedClient,
             @AuthenticationPrincipal OAuth2User oauth2User,
             Model model) {
+        // oauth2User 是当前登录用户（来自 OIDC UserInfo 或 ID Token）
         model.addAttribute("username", oauth2User != null ? oauth2User.getName() : "");
         model.addAttribute("attributes", oauth2User != null ? oauth2User.getAttributes() : null);
+
+        // 从当前登录会话关联的 OAuth2 客户端信息里取 access token
         if (authorizedClient != null && authorizedClient.getAccessToken() != null) {
             model.addAttribute("accessToken", authorizedClient.getAccessToken().getTokenValue());
         }
+
         String bearer = authorizedClient != null && authorizedClient.getAccessToken() != null
                 ? authorizedClient.getAccessToken().getTokenValue()
                 : null;
+
+        // 带着 access token 去调用资源服务器受保护接口 /userinfo
         if (bearer != null) {
             String json = RestClient.create().get()
                     .uri(userinfoUri)

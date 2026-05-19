@@ -1,6 +1,11 @@
 server:
+  # OAuth2 客户端（第三方应用）端口
   port: 8080
-
+  address: 0.0.0.0
+  servlet:
+    session:
+      cookie:
+        name: OAUTH_CLIENT_SESSION
 spring:
   application:
     name: oauth-client
@@ -9,6 +14,7 @@ spring:
       client:
         registration:
           demo-client:
+            # 这里的 registrationId = demo-client，会对应 /oauth2/authorization/demo-client
             provider: demo
             client-id: demo-client
             client-secret: demo-secret
@@ -16,14 +22,17 @@ spring:
               - openid
               - profile
             authorization-grant-type: authorization_code
+            # Spring Security 默认授权码回调模板
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
         provider:
           demo:
-            issuer-uri: http://127.0.0.1:9000
+            # 指向授权服务器的发行者地址
+            issuer-uri: http://localhost:9000
 
 demo:
   resource:
-    userinfo-uri: http://127.0.0.1:8090/userinfo
+    # 业务里实际调用的资源服务器地址
+    userinfo-uri: http://localhost:8090/userinfo
 
 logging:
   level:

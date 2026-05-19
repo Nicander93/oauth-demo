@@ -21,15 +21,18 @@ public class DefaultSecurityConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+        // 兜底过滤链：处理非 OAuth2 端点（例如 /login）
         http.authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/login", "/error").permitAll()
                         .anyRequest().authenticated())
+                // 使用默认表单登录页，供授权服务器登录用户
                 .formLogin(Customizer.withDefaults());
         return http.build();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
+        // 演示用内存用户
         UserDetails admin = User.withUsername("admin")
                 .password("{noop}password")
                 .roles("ADMIN", "USER")
@@ -43,6 +46,7 @@ public class DefaultSecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        // 这里保留默认委托编码器，便于后续切换真实加密方案
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }

@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  thymeleaf:
+    cache: false
+
+manual:
+  oauth:
+    client-id: demo-client
+    client-secret: demo-secret
+    redirect-uri: http://localhost:8080/callback
+    scope: openid profile
+    auth-server-base-url: http://localhost:9000

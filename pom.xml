@@ -21,6 +21,8 @@
         <module>oauth-server</module>
         <module>oauth-client</module>
         <module>oauth-resource</module>
+        <module>auth-server</module>
+        <module>client-app</module>
     </modules>
 
     <properties>
