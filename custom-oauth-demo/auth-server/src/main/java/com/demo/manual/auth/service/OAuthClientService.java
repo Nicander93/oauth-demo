@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
-
+/** 注册客户端（client_id/secret、回调地址白名单、允许的 scope）的校验 */
 @Service
 public class OAuthClientService {
 

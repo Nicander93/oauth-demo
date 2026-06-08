@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>绑定本地账号</title>
+    <style>
+        body { font-family: sans-serif; max-width: 480px; margin: 40px auto; }
+        input { display: block; width: 100%; margin: 8px 0; padding: 8px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+<h2>绑定本地账号</h2>
+<p>统一认证身份: <strong th:text="${oauthLoginId}"></strong> (<span th:text="${nickname}"></span>)</p>
+<p th:if="${param.error}" style="color:red;" th:text="${param.error}"></p>
+<p>请输入已有本地账号密码完成绑定（例如 bob 绑定 bob_local）：</p>
+<form method="post" action="/bind">
+    <label>本地用户名 <input name="username" value="bob_local"></label>
+    <label>本地密码 <input name="password" type="password" value="password"></label>
+    <button type="submit">确认绑定</button>
+</form>
+<p><a href="/">返回首页</a></p>
+</body>
+</html>

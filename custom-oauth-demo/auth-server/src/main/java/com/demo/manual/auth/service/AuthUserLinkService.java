@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * 统一身份（auth 用户）与各业务系统用户的映射；
+ * UserInfo 按 client 的 systemCode 附带 biz_* 扩展字段。
+ */
 @Service
 public class AuthUserLinkService {
 

@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Map;
 
+/** 最小化 JWT 实现：header.payload.signature，算法 HS256（学习用，非生产库） */
 public final class JwtUtil {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-
+/** 演示：auth 用户 alice(id=1) 关联 demo-app 业务用户 */
 @Repository
 public class AuthUserLinkRepository {
 

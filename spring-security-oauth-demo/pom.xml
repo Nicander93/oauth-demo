@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.demo</groupId>
+        <artifactId>oauth2-demo</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>spring-security-oauth-demo</artifactId>
+    <packaging>pom</packaging>
+    <name>spring-security-oauth-demo</name>
+
+    <modules>
+        <module>oauth-server</module>
+        <module>oauth-client</module>
+        <module>oauth-resource</module>
+    </modules>
+</project>

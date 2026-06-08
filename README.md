@@ -1,11 +1,12 @@
 # OAuth2 手写演示（auth-server + client-app）
 
-本仓库包含两套实现：
+本仓库包含三套实现：
 
 | 模块 | 说明 |
 |------|------|
-| **auth-server** + **client-app** | 不依赖 Spring Authorization Server，手写 OAuth2 授权码 + 部分 OIDC |
-| oauth-server + oauth-client + oauth-resource | 基于 Spring Authorization Server / OAuth2 Client / Resource Server 的标准集成 |
+| **custom-oauth-demo**（auth-server + client-app） | 不依赖 Spring Authorization Server，手写 OAuth2 授权码 + 部分 OIDC |
+| **spring-security-oauth-demo**（oauth-server + oauth-client + oauth-resource） | 基于 Spring Authorization Server / OAuth2 Client / Resource Server 的标准集成 |
+| **sa-token-oauth-sso-demo**（auth-center + system-a + system-b） | Sa-Token OAuth2 认证中心 + 多系统 SSO + 遗留系统绑定，详见 [sa-token-oauth-sso-demo/README.md](sa-token-oauth-sso-demo/README.md) |
 
 **本文档以 `auth-server` + `client-app` 为主线**，便于对照 RFC 6749 理解每一步在代码中的位置。
 
@@ -15,10 +16,10 @@
 
 ```bash
 # 终端 1：授权服务器（端口 9000）
-mvn -pl auth-server spring-boot:run
+mvn -pl custom-oauth-demo/auth-server spring-boot:run
 
 # 终端 2：客户端（端口 8080）
-mvn -pl client-app spring-boot:run
+mvn -pl custom-oauth-demo/client-app spring-boot:run
 ```
 
 浏览器访问 http://localhost:8080/ ，点击 OAuth 登录。
@@ -160,7 +161,7 @@ sequenceDiagram
 ## 目录结构（手写部分）
 
 ```
-auth-server/                          # 授权服务器 :9000
+custom-oauth-demo/auth-server/        # 授权服务器 :9000
 └── src/main/java/com/demo/manual/auth/
     ├── controller/
     │   ├── LoginController.java          # 步骤 2：用户登录
@@ -171,7 +172,7 @@ auth-server/                          # 授权服务器 :9000
     ├── service/                        # code / token / 客户端校验
     └── repository/                     # 内存 demo 数据
 
-client-app/                           # OAuth 客户端 :8080
+custom-oauth-demo/client-app/         # OAuth 客户端 :8080
 └── src/main/java/com/demo/manual/client/
     ├── controller/
     │   ├── OAuthLoginController.java   # 步骤 1：发起授权
@@ -200,7 +201,31 @@ client-app/                           # OAuth 客户端 :8080
 
 ---
 
+## Sa-Token OAuth SSO（第三套）
+
+```bash
+# 终端 1：认证中心 :9100
+mvn -pl sa-token-oauth-sso-demo/auth-center spring-boot:run
+
+# 终端 2：系统 A :9201
+mvn -pl sa-token-oauth-sso-demo/system-a spring-boot:run
+
+# 终端 3：系统 B :9202
+mvn -pl sa-token-oauth-sso-demo/system-b spring-boot:run
+```
+
+| 角色 | 地址 | 说明 |
+|------|------|------|
+| 认证中心 | http://localhost:9100 | `alice`/`password`、`bob`/`password` |
+| 系统 A | http://localhost:9201 | 仅 OAuth 登录 |
+| 系统 B | http://localhost:9202 | 本地 `bob_local`/`password` + OAuth + 账号绑定 |
+
+**SSO 验证**：在 A 用 OAuth 登录后，打开 B 点「统一认证登录」，认证中心应不再要求输入密码。
+
+---
+
 ## 相关文档
 
 - 需求说明：`custom-prd.md`
+- Sa-Token SSO：`sa-token-oauth-sso-demo/README.md`
 - 标准参考：[RFC 6749 Authorization Code Grant](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1)、[OpenID Connect Core](https://openid.net/specs/openid-connect-core-1_0.html)

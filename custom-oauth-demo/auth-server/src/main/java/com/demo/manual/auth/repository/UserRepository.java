@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-
+/** 授权中心用户（演示账号 alice / password） */
 @Repository
 public class UserRepository {
 

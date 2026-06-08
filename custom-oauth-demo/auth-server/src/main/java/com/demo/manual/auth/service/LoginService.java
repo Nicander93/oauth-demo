@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/** 授权服务器表单登录校验（demo 明文密码，仅用于学习） */
 @Service
 public class LoginService {
 

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>统一认证中心 - 登录</title>
+    <style>
+        body { font-family: sans-serif; max-width: 400px; margin: 10vh auto; }
+        input { display: block; width: 100%; margin: 8px 0; padding: 8px; box-sizing: border-box; }
+        button { padding: 8px 16px; cursor: pointer; }
+        .hint { color: #666; font-size: 14px; margin-top: 16px; }
+    </style>
+</head>
+<body>
+<h2>统一认证中心</h2>
+<p>账号：<input name="name" type="text" value="alice"></p>
+<p>密码：<input name="pwd" type="password" value="password"></p>
+<button type="button" onclick="doLogin()">登录</button>
+<p class="hint">演示账号：alice / password，bob / password</p>
+<p id="msg" style="color:red;"></p>
+
+<script>
+    function doLogin() {
+        const name = document.querySelector('[name=name]').value;
+        const pwd = document.querySelector('[name=pwd]').value;
+        fetch('/oauth2/doLogin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'name=' + encodeURIComponent(name) + '&pwd=' + encodeURIComponent(pwd)
+        })
+            .then(r => r.json())
+            .then(res => {
+                if (res.code === 200) {
+                    location.reload();
+                } else {
+                    document.getElementById('msg').textContent = res.msg || '登录失败';
+                }
+            })
+            .catch(e => document.getElementById('msg').textContent = e.message);
+    }
+</script>
+</body>
+</html>

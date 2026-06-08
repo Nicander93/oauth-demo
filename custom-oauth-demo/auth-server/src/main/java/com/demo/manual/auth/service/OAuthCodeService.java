@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.Set;
-
+/** 授权码（authorization code）的生成、校验与一次性消费 */
 @Service
 public class OAuthCodeService {
 
@@ -26,6 +26,7 @@ public class OAuthCodeService {
         this.codeExpiresSeconds = codeExpiresSeconds;
     }
 
+    /** code 与 client、用户、redirect_uri、scope 绑定，换 token 时须全部匹配 */
     public OAuthCode createCode(String clientId, Long authUserId, String username,
                                 String redirectUri, Set<String> scopes) {
         String code = RandomTokenUtil.randomToken();

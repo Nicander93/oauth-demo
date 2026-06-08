@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>系统 B</title>
+    <style>
+        body { font-family: sans-serif; max-width: 640px; margin: 40px auto; }
+        .card { border: 1px solid #ddd; padding: 16px; margin: 12px 0; border-radius: 8px; }
+        .error { color: #c00; }
+        input { margin: 4px 0; padding: 6px; }
+    </style>
+</head>
+<body>
+<h1>系统 B（已建系统）</h1>
+<p>支持本地账号登录 + 统一认证 OAuth；OAuth 首次需绑定本地账号（用户名相同则自动绑定）。</p>
+
+<p th:if="${error}" class="error" th:text="'错误: ' + ${error}"></p>
+
+<div class="card" th:if="${localUser == null}">
+    <h3>本地登录</h3>
+    <form method="post" action="/local/login">
+        <div>用户名 <input name="username" value="bob_local"></div>
+        <div>密码 <input name="password" type="password" value="password"></div>
+        <button type="submit">本地登录</button>
+    </form>
+    <p style="color:#666;font-size:14px;">演示：bob_local / password</p>
+</div>
+<div class="card" th:if="${localUser != null}">
+    <h3>本地已登录</h3>
+    <p>用户: <span th:text="${localUser.nickname}"></span> (<span th:text="${localUser.username}"></span>)</p>
+    <form method="post" action="/logout/local"><button type="submit">退出本地</button></form>
+</div>
+<div class="card" th:if="${oauthUser == null}">
+    <h3>统一认证（OAuth）</h3>
+    <a href="/oauth/login">使用统一认证登录</a>
+</div>
+<div class="card" th:if="${oauthUser != null}">
+    <h3>OAuth 已登录</h3>
+    <ul>
+        <li>中心 loginId: <span th:text="${oauthUser.loginId}"></span></li>
+        <li>绑定本地用户 ID: <span th:text="${oauthUser.bizUserId}"></span></li>
+        <li>openid: <span th:text="${oauthUser.openid}"></span></li>
+    </ul>
+    <form method="post" action="/logout/oauth"><button type="submit">退出 OAuth</button></form>
+</div>
+
+<form method="post" action="/logout" th:if="${localUser != null or oauthUser != null}">
+    <button type="submit">全部退出</button>
+</form>
+</body>
+</html>

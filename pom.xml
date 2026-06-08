@@ -18,14 +18,13 @@
     <name>oauth2-demo</name>
 
     <modules>
-        <module>oauth-server</module>
-        <module>oauth-client</module>
-        <module>oauth-resource</module>
-        <module>auth-server</module>
-        <module>client-app</module>
+        <module>custom-oauth-demo</module>
+        <module>spring-security-oauth-demo</module>
+        <module>sa-token-oauth-sso-demo</module>
     </modules>
 
     <properties>
         <java.version>21</java.version>
+        <sa-token.version>1.45.0</sa-token.version>
     </properties>
 </project>

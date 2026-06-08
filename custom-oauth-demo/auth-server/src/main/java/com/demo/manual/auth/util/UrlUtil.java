@@ -4,6 +4,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Map;
 
+/** 向 URL 追加查询参数（用于 authorize 回调与登录后跳回） */
 public final class UrlUtil {
 
     private UrlUtil() {

@@ -1,0 +1,13 @@
+server:
+  port: 9100
+
+spring:
+  application:
+    name: auth-center
+  thymeleaf:
+    cache: false
+
+sa-token:
+  token-name: AUTH_CENTER_TOKEN
+  timeout: 86400
+  is-log: false

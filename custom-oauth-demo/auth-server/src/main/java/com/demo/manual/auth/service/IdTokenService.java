@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
+/**
+ * 签发 OIDC id_token（JWT）。
+ * 本 demo 用 HS256 + 共享密钥，生产环境通常用 RS256 并由客户端通过 JWKS 验签。
+ */
 @Service
 public class IdTokenService {
 
@@ -31,9 +34,9 @@ public class IdTokenService {
     public String createIdToken(User user, String clientId) {
         Instant now = Instant.now();
         Map<String, Object> claims = new LinkedHashMap<>();
-        claims.put("iss", issuer);
-        claims.put("sub", String.valueOf(user.id()));
-        claims.put("aud", clientId);
+        claims.put("iss", issuer);           // 签发者
+        claims.put("sub", String.valueOf(user.id()));  // 主体（用户唯一标识）
+        claims.put("aud", clientId);         // 受众（本 token 发给哪个 client）
         claims.put("iat", now.getEpochSecond());
         claims.put("exp", now.plusSeconds(tokenExpiresSeconds).getEpochSecond());
         claims.put("preferred_username", user.username());

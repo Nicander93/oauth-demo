@@ -11,6 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * OAuth 回调（redirect_uri）：用 code 换 token，再拉取 UserInfo，结果写入客户端 Session。
+ */
 @Controller
 public class CallbackController {
 
@@ -28,6 +31,7 @@ public class CallbackController {
     public String callback(@RequestParam String code,
                            @RequestParam(required = false) String state,
                            HttpSession session) {
+        // 1. 校验 state（必须与发起登录时 Session 中保存的一致）
         String savedState = (String) session.getAttribute(OAuthLoginController.SESSION_OAUTH_STATE);
         if (savedState == null || !savedState.equals(state)) {
             log.warn("state 校验失败: expected={}, actual={}", savedState, state);
@@ -35,7 +39,9 @@ public class CallbackController {
         }
         log.info("state 校验通过");
 
+        // 2. 后端用 code + client_secret 换 access_token（及 scope 含 openid 时的 id_token）
         TokenResponse tokenResponse = oAuthTokenService.exchangeCode(code);
+        // 3. 用 Bearer access_token 访问 OIDC UserInfo
         UserInfo userInfo = userInfoService.fetchUserInfo(tokenResponse.accessToken());
 
         session.setAttribute(HomeController.SESSION_ACCESS_TOKEN, tokenResponse.accessToken());

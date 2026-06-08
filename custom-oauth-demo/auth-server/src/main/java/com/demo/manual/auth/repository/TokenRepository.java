@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-
+/** 内存存储 access_token，供 /userinfo 校验 */
 @Repository
 public class TokenRepository {
 

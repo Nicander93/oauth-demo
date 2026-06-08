@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-
+/** 内存存储已签发的 authorization code（生产环境应落库并支持集群） */
 @Repository
 public class CodeRepository {
 

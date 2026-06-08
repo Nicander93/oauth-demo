@@ -11,10 +11,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
+/**
+ * 授权服务器本地登录页（与 OAuth 客户端 Session 分离）。
+ * 登录成功后若有挂起的授权请求，则跳回 {@code /oauth/authorize} 继续发 code。
+ */
 @Controller
 public class LoginController {
 
+    /** 当前在授权服务器已认证的用户 */
     public static final String SESSION_LOGIN_USER = "LOGIN_USER";
+    /** 登录前访问 /oauth/authorize 时暂存的完整 URL */
     public static final String SESSION_OAUTH_PENDING = "OAUTH_PENDING";
 
     private final LoginService loginService;

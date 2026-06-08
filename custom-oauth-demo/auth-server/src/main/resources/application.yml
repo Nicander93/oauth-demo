@@ -1,5 +1,11 @@
+# 授权服务器（IdP）：9000
 server:
   port: 9000
+  servlet:
+    session:
+      cookie:
+        # 与客户端区分 Session Cookie，避免同域多应用串会话
+        name: AUTH_SESSION
 
 spring:
   thymeleaf:
@@ -7,8 +13,8 @@ spring:
 
 manual:
   oauth:
-    code-expires-seconds: 300
-    token-expires-seconds: 3600
+    code-expires-seconds: 300   # authorization code 有效期（秒）
+    token-expires-seconds: 3600   # access_token / id_token 有效期（秒）
   oidc:
-    issuer: http://localhost:9000
-    jwt-secret: demo-oidc-secret-change-me
+    issuer: http://localhost:9000 # 写入 id_token iss，并与发现文档一致
+    jwt-secret: demo-oidc-secret-change-me  # HS256 签名密钥（demo 用）

@@ -1,5 +1,11 @@
+# OAuth 客户端（RP）：8080
 server:
   port: 8080
+  servlet:
+    session:
+      cookie:
+        # 与 auth-server 区分，避免 localhost 多端口共用 JSESSIONID 导致 state 丢失
+        name: CLIENT_SESSION
 
 spring:
   thymeleaf:

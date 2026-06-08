@@ -15,7 +15,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+/**
+ * 访问令牌生命周期；换 token 响应中若 scope 含 openid 则附带 id_token（OIDC）。
+ */
 @Service
 public class AccessTokenService {
 
@@ -69,6 +71,7 @@ public class AccessTokenService {
         response.put("expires_in", Math.max(expiresIn, 0));
         response.put("scope", scope);
 
+        // scope 含 openid 时按 OIDC 在 token 响应中附带 id_token
         if (token.scopes().contains("openid")) {
             User user = userService.findById(token.authUserId())
                     .orElseThrow(() -> new IllegalStateException("授权用户不存在"));

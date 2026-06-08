@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>系统 A</title>
+    <style>
+        body { font-family: sans-serif; max-width: 560px; margin: 40px auto; }
+        .card { border: 1px solid #ddd; padding: 16px; border-radius: 8px; }
+        .error { color: #c00; }
+    </style>
+</head>
+<body>
+<h1>系统 A（新建系统）</h1>
+<p>仅支持统一认证中心 OAuth 登录。</p>
+
+<p th:if="${error}" class="error" th:text="'错误: ' + ${error}"></p>
+
+<div th:if="${user == null}" class="card">
+    <p>当前未登录</p>
+    <a href="/oauth/login">使用统一认证登录</a>
+</div>
+
+<div th:if="${user != null}" class="card">
+    <p>已登录（OAuth）</p>
+    <ul>
+        <li>loginId: <span th:text="${user.loginId}"></span></li>
+        <li>openid: <span th:text="${user.openid}"></span></li>
+        <li>昵称: <span th:text="${user.nickname}"></span></li>
+    </ul>
+    <form method="post" action="/logout">
+        <button type="submit">退出</button>
+    </form>
+</div>
+</body>
+</html>

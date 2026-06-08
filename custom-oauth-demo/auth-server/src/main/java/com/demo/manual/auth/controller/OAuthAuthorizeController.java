@@ -17,6 +17,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * 授权端点（Authorization Code 模式第一步）。
+ * <p>
+ * 浏览器被重定向到此地址；用户已在授权服务器登录后，校验 client/redirect_uri/scope，
+ * 生成一次性 authorization code，再 302 回客户端的 redirect_uri?code=...&state=...
+ * </p>
+ */
 @Controller
 public class OAuthAuthorizeController {
 
@@ -29,6 +36,9 @@ public class OAuthAuthorizeController {
         this.oAuthCodeService = oAuthCodeService;
     }
 
+    /**
+     * 标准参数：response_type=code、client_id、redirect_uri、scope；state 可选（防 CSRF，由客户端生成并校验）。
+     */
     @GetMapping("/oauth/authorize")
     public String authorize(@RequestParam String response_type,
                             @RequestParam String client_id,
@@ -36,6 +46,7 @@ public class OAuthAuthorizeController {
                             @RequestParam String scope,
                             @RequestParam(required = false) String state,
                             HttpSession session) {
+        // 未登录：记下完整授权 URL，登录成功后继续走本端点
         User loginUser = (User) session.getAttribute(LoginController.SESSION_LOGIN_USER);
         if (loginUser == null) {
             String returnUrl = buildAuthorizeUrl(response_type, client_id, redirect_uri, scope, state);
@@ -47,6 +58,7 @@ public class OAuthAuthorizeController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "unsupported response_type");
         }
 
+        // 校验第三方应用身份与回调白名单，防止 code 被劫持到恶意站点
         OAuthClient client = oAuthClientService.findByClientId(client_id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid client_id"));
 
@@ -62,6 +74,7 @@ public class OAuthAuthorizeController {
         OAuthCode oauthCode = oAuthCodeService.createCode(
                 client_id, loginUser.id(), loginUser.username(), redirect_uri, scopes);
 
+        // 把 code 通过浏览器重定向交给客户端（后端换 token 时再校验 client_secret）
         Map<String, String> params = new LinkedHashMap<>();
         params.put("code", oauthCode.code());
         if (state != null) {

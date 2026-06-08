@@ -1,0 +1,20 @@
+server:
+  port: 9201
+  servlet:
+    session:
+      cookie:
+        name: SYSTEM_A_SESSION
+
+spring:
+  application:
+    name: system-a
+  thymeleaf:
+    cache: false
+
+sso:
+  oauth:
+    auth-center-url: http://localhost:9100
+    client-id: system-a
+    client-secret: system-a-secret
+    redirect-uri: http://localhost:9201/callback
+    scope: openid userinfo
