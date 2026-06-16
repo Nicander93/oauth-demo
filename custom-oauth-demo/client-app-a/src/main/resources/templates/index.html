@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>系统 A - OAuth2 / OIDC Client Demo</title>
+    <style>
+        body { font-family: sans-serif; max-width: 720px; margin: 60px auto; line-height: 1.6; }
+        .token { word-break: break-all; background: #f4f4f4; padding: 12px; font-size: 13px; }
+        .hint { font-size: 13px; color: #666; margin-top: 24px; padding-top: 16px; border-top: 1px solid #eee; }
+        a.btn { display: inline-block; margin-top: 16px; margin-right: 8px; padding: 10px 20px; background: #2563eb; color: #fff; text-decoration: none; border-radius: 4px; }
+        form { display: inline; }
+        button { padding: 10px 20px; cursor: pointer; }
+        .nav { margin-top: 16px; }
+        .error { color: #c00; }
+    </style>
+</head>
+<body>
+<div th:if="${!loggedIn}">
+    <h2>系统 A - OAuth2 / OIDC Client Demo</h2>
+    <p>尚未登录</p>
+    <a class="btn" href="/login/oauth">使用 DemoAuth 登录（scope=openid profile）</a>
+    <div class="nav">
+        <a href="http://localhost:9000/portal">返回统一认证门户</a>
+        ·
+        <a href="http://localhost:8061/">进入系统 B</a>
+    </div>
+    <p class="error" th:if="${param.error != null and param.error[0] == 'invalid_state'}">登录失败：state 校验未通过</p>
+    <p class="error" th:if="${param.error != null and param.error[0] == 'no_local_user'}">
+        登录失败：认证中心账号（sub=<span th:text="${param.sub}"></span>）在本系统无对应本地用户，且用户名无法自动匹配。
+        本系统仅预置本地用户 alice（U10001）。
+    </p>
+</div>
+<div th:if="${loggedIn}">
+    <h2>系统 A - 登录成功</h2>
+    <p><strong>OIDC sub（认证中心）:</strong> <span th:text="${login.oidcUser.sub}"></span></p>
+    <p><strong>preferred_username:</strong> <span th:text="${login.oidcUser.username}"></span></p>
+    <p><strong>本地用户编码:</strong> <span th:text="${login.localUser.userCode}"></span></p>
+    <p><strong>本地用户名:</strong> <span th:text="${login.localUser.username}"></span></p>
+    <p><strong>本地昵称:</strong> <span th:text="${login.localUser.nickname}"></span></p>
+    <p><strong>access_token:</strong></p>
+    <pre class="token" th:text="${login.accessToken}"></pre>
+    <p><strong>id_token:</strong></p>
+    <pre class="token" th:text="${login.idToken}"></pre>
+    <form method="post" action="/logout">
+        <button type="submit">退出登录（仅本系统）</button>
+    </form>
+    <div class="nav">
+        <a href="http://localhost:9000/portal">返回统一认证门户</a>
+        ·
+        <a href="http://localhost:8061/">进入系统 B</a>
+    </div>
+    <div class="hint">
+        本地用户与 OAuth sub 的绑定保存在<strong>本系统</strong>（oauth_user_link 表）。alice 首次 OAuth 登录时按用户名自动绑定。
+    </div>
+</div>
+</body>
+</html>

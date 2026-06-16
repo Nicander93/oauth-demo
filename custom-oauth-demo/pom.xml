@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 父工程：auth-server(9000 授权服务器) + client-app(8080 OAuth 客户端) -->
+<!-- 父工程：auth-server(9000) + client-app-a(8060) + client-app-b(8061) -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -17,6 +17,7 @@
 
     <modules>
         <module>auth-server</module>
-        <module>client-app</module>
+        <module>client-app-a</module>
+        <module>client-app-b</module>
     </modules>
 </project>

@@ -19,6 +19,7 @@
 
     <modules>
         <module>custom-oauth-demo</module>
+        <module>custom-oauth-bff</module>
         <module>spring-security-oauth-demo</module>
         <module>sa-token-oauth-sso-demo</module>
     </modules>

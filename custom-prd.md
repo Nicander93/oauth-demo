@@ -127,20 +127,20 @@ RBAC
 数据库
 Consent 授权页
 动态客户端注册
-SSO
 多租户
 ```
+
+**后续已实现（SSO 演示）**：多 RP（`client-app-a` + `client-app-b`）+ 统一门户 `/portal`；单点登出联动、`prompt=none` 仍不做。
 
 ---
 
 # 六、系统整体架构
 
-采用双服务结构。
-
 ```text
 manual-oauth-demo
 ├── auth-server
-└── client-app
+├── client-app-a
+└── client-app-b
 ```
 
 ---
@@ -152,17 +152,20 @@ manual-oauth-demo
 │ Browser          │
 └────────┬─────────┘
          │
-         ▼
-┌──────────────────┐
-│ client-app       │
-│ OAuth2 Client    │
-└────────┬─────────┘
-         │ redirect
-         ▼
+    ┌────┴────┐
+    ▼         ▼
+┌─────────┐ ┌─────────┐
+│client-app-a│ │client-app-b│
+│ OAuth2  │ │ OAuth2  │
+│ Client  │ │ Client  │
+└────┬────┘ └────┬────┘
+     │ redirect  │
+     └─────┬─────┘
+           ▼
 ┌──────────────────┐
 │ auth-server      │
 │ Authorization    │
-│ Server            │
+│ Server + /portal │
 └──────────────────┘
 ```
 
@@ -208,7 +211,7 @@ Maven
 | 服务          | 端口   |
 | ----------- | ---- |
 | auth-server | 9000 |
-| client-app  | 8080 |
+| client-app-a  | 8080 |
 
 ---
 
@@ -494,7 +497,7 @@ Authorization: Bearer xxx
 
 ---
 
-# 十二、client-app 功能设计
+# 十二、client-app-a 功能设计
 
 ---
 
@@ -712,10 +715,10 @@ auth-server
 
 ---
 
-# client-app
+# client-app-a
 
 ```text
-client-app
+client-app-a
 ├── controller
 │   ├── HomeController
 │   ├── OAuthLoginController
@@ -822,7 +825,7 @@ token 出现在 URL
 
 ---
 
-# client-app
+# client-app-a
 
 ## 首页
 

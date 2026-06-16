@@ -13,8 +13,9 @@
 </head>
 <body>
 <h2>DemoAuth 登录</h2>
-<p>演示账号：alice / password</p>
-<p style="font-size:13px;color:#666">OIDC 学习：授权中心用户 alice 已关联业务用户 U10001（demo-app）</p>
+<p>演示账号：alice / password，bob / password</p>
+<p style="font-size:13px;color:#666">认证中心只管统一身份（sub）；各业务系统的本地用户与 OAuth 绑定在子系统内完成。</p>
+<p style="font-size:13px;color:#666">登录成功后将进入<a href="/portal">统一登录门户</a>，可从门户跳转各业务系统（SSO 演示）</p>
 <form method="post" action="/login">
     <label>用户名
         <input type="text" name="username" value="alice" required>

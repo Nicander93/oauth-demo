@@ -1,0 +1,17 @@
+# BFF 后端：8070；浏览器经 Vite :5173 代理访问，OAuth redirect_uri 指向 5173
+server:
+  port: 8070
+  servlet:
+    session:
+      cookie:
+        name: BFF_SESSION
+
+manual:
+  bff:
+    ui-base-url: http://localhost:5173
+  oauth:
+    client-id: demo-client-bff
+    client-secret: demo-secret-bff
+    redirect-uri: http://localhost:8070/callback
+    scope: openid profile
+    auth-server-base-url: http://localhost:9000

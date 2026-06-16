@@ -1,6 +1,6 @@
 package com.demo.manual.auth.model;
 
-/** 授权中心统一账号（与业务系统 BizUser 通过 AuthUserLink 关联） */
+/** 授权中心统一账号（认证用；各业务系统用户由子系统自行维护） */
 public record User(
         Long id,
         String username,

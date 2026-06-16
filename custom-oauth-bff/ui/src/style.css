@@ -1,0 +1,42 @@
+body {
+  font-family: sans-serif;
+  max-width: 720px;
+  margin: 60px auto;
+  line-height: 1.6;
+}
+
+.token {
+  word-break: break-all;
+  background: #f4f4f4;
+  padding: 12px;
+  font-size: 13px;
+}
+
+.hint {
+  font-size: 13px;
+  color: #666;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 16px;
+  margin-right: 8px;
+  padding: 10px 20px;
+  background: #2563eb;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.nav {
+  margin-top: 16px;
+}
+
+.error {
+  color: #c00;
+}

@@ -53,6 +53,6 @@ public class LoginController {
             session.removeAttribute(SESSION_OAUTH_PENDING);
             return "redirect:" + pending;
         }
-        return "redirect:/login?success=1";
+        return "redirect:/portal";
     }
 }

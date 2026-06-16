@@ -1,0 +1,20 @@
+# OAuth 客户端 A（RP）：8060
+server:
+  port: 8060
+  servlet:
+    session:
+      cookie:
+        # 与 auth-server 区分，避免 localhost 多端口共用 JSESSIONID 导致 state 丢失
+        name: CLIENT_SESSION
+
+spring:
+  thymeleaf:
+    cache: false
+
+manual:
+  oauth:
+    client-id: demo-client
+    client-secret: demo-secret
+    redirect-uri: http://localhost:8060/callback
+    scope: openid profile
+    auth-server-base-url: http://localhost:9000

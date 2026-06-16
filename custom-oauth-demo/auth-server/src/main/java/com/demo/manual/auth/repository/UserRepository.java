@@ -6,7 +6,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-/** 授权中心用户（演示账号 alice / password） */
+
+/** 授权中心用户（演示账号 alice / bob） */
 @Repository
 public class UserRepository {
 
@@ -14,6 +15,7 @@ public class UserRepository {
 
     public UserRepository() {
         users.put("alice", new User(1L, "alice", "password", "Alice"));
+        users.put("bob", new User(2L, "bob", "password", "Bob"));
     }
 
     public Optional<User> findByUsername(String username) {

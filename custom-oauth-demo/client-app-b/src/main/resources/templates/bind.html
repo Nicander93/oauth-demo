@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>绑定本地账号 - 系统 B</title>
+    <style>
+        body { font-family: sans-serif; max-width: 420px; margin: 80px auto; line-height: 1.6; }
+        label { display: block; margin-top: 12px; }
+        input { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { margin-top: 16px; padding: 10px 24px; }
+        .error { color: #c00; margin-top: 12px; }
+        .hint { font-size: 13px; color: #666; margin-top: 16px; }
+    </style>
+</head>
+<body>
+<h2>绑定本地账号</h2>
+<p>认证中心账号：<strong th:text="${username}"></strong>（sub=<span th:text="${sub}"></span>）</p>
+<p class="hint">本地用户名与认证中心不一致时，需输入已有本地账号完成绑定。例如认证中心 bob 绑定本地 bob_local。</p>
+<form method="post" action="/bind">
+    <label>本地用户名
+        <input type="text" name="username" required>
+    </label>
+    <label>本地密码
+        <input type="password" name="password" required>
+    </label>
+    <button type="submit">确认绑定</button>
+</form>
+<p class="error" th:if="${error}" th:text="${error}"></p>
+</body>
+</html>

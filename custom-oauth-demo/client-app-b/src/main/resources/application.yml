@@ -1,0 +1,19 @@
+# OAuth 客户端 B（RP）：8061
+server:
+  port: 8061
+  servlet:
+    session:
+      cookie:
+        name: CLIENT_B_SESSION
+
+spring:
+  thymeleaf:
+    cache: false
+
+manual:
+  oauth:
+    client-id: demo-client-b
+    client-secret: demo-secret-b
+    redirect-uri: http://localhost:8061/callback
+    scope: openid profile
+    auth-server-base-url: http://localhost:9000

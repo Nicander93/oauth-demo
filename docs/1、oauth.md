@@ -292,8 +292,11 @@ OIDC   → 在 OAuth2 上补了身份层，才真正适合做登录 / SSO
 # 终端 1：授权服务器
 mvn -pl custom-oauth-demo/auth-server spring-boot:run   # :9000
 
-# 终端 2：客户端
-mvn -pl custom-oauth-demo/client-app spring-boot:run  # :8080
+# 终端 2：客户端 A
+mvn -pl custom-oauth-demo/client-app-a spring-boot:run  # :8080
+
+# 终端 3：客户端 B（SSO 演示）
+mvn -pl custom-oauth-demo/client-app-b spring-boot:run  # :8081
 ```
 
 浏览器访问 http://localhost:8080/ ，点击 OAuth 登录。
@@ -301,18 +304,18 @@ mvn -pl custom-oauth-demo/client-app spring-boot:run  # :8080
 | 步骤图角色 | 本 demo | 说明 |
 |-----------|---------|------|
 | U 用户（浏览器） | 浏览器 | 只经手跳转 URL，不接触 `client_secret` |
-| C 第三方应用（后端） | `client-app` :8080 | 发起授权、校验 state、后端换票 |
-| A 授权服务器 | `auth-server` :9000 | 登录、发 code、换 token |
+| C 第三方应用（后端） | `client-app-a` :8080、`client-app-b` :8081 | 发起授权、校验 state、后端换票 |
+| A 授权服务器 | `auth-server` :9000 | 登录、发 code、换 token、统一门户 `/portal` |
 | R 资源服务器 | `auth-server` :9000 | 与 A 同进程，`GET /userinfo` 校验 Bearer token |
 
-演示凭据：用户 `alice` / `password`；客户端 `demo-client` / `demo-secret`；scope `openid profile`。
+演示凭据：用户 `alice` / `password`；客户端 A `demo-client` / `demo-secret`；客户端 B `demo-client-b` / `demo-secret-b`；scope `openid profile`。
 
 ### 授权码流程逐步对照
 
 ```mermaid
 sequenceDiagram
     participant U as 用户（浏览器）
-    participant C as client-app :8080
+    participant C as client-app-a :8080
     participant A as auth-server :9000
     participant R as auth-server /userinfo
 
@@ -405,6 +408,16 @@ sequenceDiagram
 | HTTPS / 持久化存储 | 本地 HTTP + 内存仓库，重启失效 |
 
 更完整的代码链路见 [README](../README.md) 的「一次完整请求的代码链路」一节。
+
+### SSO 场景验证
+
+用户在系统 A 完成 OAuth 登录后，auth-server 的 `SESSION_LOGIN_USER` 已写入浏览器 Cookie（`:9000`）。此时从统一门户 http://localhost:9000/portal 点击「进入系统 B」：
+
+1. 浏览器跳转到 `client-app-b` 的 `/login/oauth`，再 302 到 auth-server `/oauth/authorize`（`client_id=demo-client-b`）。
+2. `OAuthAuthorizeController.authorize` 检测到 `loginUser != null`，**跳过** `/login`，直接 `OAuthCodeService.createCode()` 并重定向回 B。
+3. B 的 `CallbackController` 换票、拉 userinfo，建立 B 本地 Session。
+
+与 sa-token demo 相同：SSO 根基是**认证中心 Session**；custom 版为手写 `/oauth/authorize`，无 consent 页，已登录即静默发 code。未实现 OIDC `prompt=none` 参数解析；门户 `POST /logout` 可演示全局登出。
 
 ---
 
